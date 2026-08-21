@@ -2,6 +2,8 @@ import { Link } from "expo-router";
 import { View } from "react-native";
 
 export default function Index() {
+    //const {loading , isLoggedIn, } = useContext(AuthContext);
+    //if(!loading && isLoggedIn) return <Redirect href='/'/>
   return (
     <View
       style={{

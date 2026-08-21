@@ -1,13 +1,12 @@
 
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import { getUser } from "./appwrite";
 import { useAppwrite } from "./useAppwrite";
 
 const INITIAL_STATE = {
-  token: null,
   user:null,
   loggedIn:false,
-  loading: false,
+  loading: true,
   error: null,
 };
 
@@ -17,7 +16,6 @@ const AuthReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN_START":
       return {
-        token: null,
         user:null,
         loggedIn:false,
         loading: true,
@@ -26,7 +24,6 @@ const AuthReducer = (state, action) => {
 
     case "LOGIN_SUCCESS":
       return {
-        token: action.payload.token,
         user:action.payload.user,
         loggedIn:true,
         loading: false,
@@ -35,7 +32,6 @@ const AuthReducer = (state, action) => {
 
     case "LOGIN_FAILURE":
       return {
-        token: null,
         user:null,
         loggedIn:false,
         loading: false,
@@ -44,7 +40,6 @@ const AuthReducer = (state, action) => {
 
     case "LOGOUT":
       return {
-        token: null,
         user:null,
         loggedIn:false,
         loading: false,
@@ -58,21 +53,35 @@ const AuthReducer = (state, action) => {
 
 export const AuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
-  const { data } = useAppwrite({
+  const { data , loading, error} = useAppwrite({
   fn: getUser,
   params: {},
   skip: false,
     });
-  const isLoggedIn = !!data;
+    useEffect(() => {
+    if (data) {
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: {
+          user: data,
+        },
+      });
+    } else if (!loading) {
+      dispatch({
+        type: "LOGIN_FAILURE",
+        payload: null,
+      });
+    }
+  }, [data,loading]);
 
   return (
     <AuthContext.Provider
       value={{
-        token: state.token,
         user:state.user,
         loading: state.loading,
-        error: state.error,
-        isLoggedIn: isLoggedIn,
+        error:error,
+        isLoggedIn: !!state.user,
+        data:data,
         dispatch,
       }}
     >
