@@ -1,3 +1,4 @@
+import { AuthContextProvider } from "@/lib/global-provider";
 import {
   Orbitron_400Regular,
   Orbitron_500Medium,
@@ -21,5 +22,9 @@ export default function RootLayout() {
   if (!fontsLoaded) {
     return null;
   }
-  return <Stack screenOptions={{headerShown:false}}/>;
+  return(
+    <AuthContextProvider>
+      <Stack screenOptions={{headerShown:false}}/>
+    </AuthContextProvider>
+    );
 } 

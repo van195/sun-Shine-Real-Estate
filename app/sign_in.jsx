@@ -1,10 +1,19 @@
 import icons from '@/constants/icons'
 import images from '@/constants/images'
+import { logIn } from '@/lib/appwrite'
 import React from 'react'
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const SignIn = () => {
+  const handleLogin = async ()=>{
+    const result = await logIn();
+    if(result){
+      console.log('login succuss');
+    }else{
+      Alert.alert('Error','failed to login');
+    }
+  }
   return (
     <SafeAreaView style={{backgroundColor:'#fff',height:'100vh'}}>
       <ScrollView contentContainerStyle={{height:'100%'}}>
@@ -20,7 +29,7 @@ const SignIn = () => {
             Let's Get You to {"\n"}
             <Text style={{color:'#0061FF'}}>Your Dream Hom</Text>
           </Text>
-          <TouchableOpacity style={{marginTop:15,marginLeft:20, width:'90%' , paddingVertical:5, borderRadius:20, elevation: 4,}}>
+          <TouchableOpacity onPress={handleLogin} style={{marginTop:15,marginLeft:20, width:'90%' , paddingVertical:5, borderRadius:20, elevation: 4,}}>
             <View style={{width:'100%',height:40, justifyContent:'center',alignItems:'center', flexDirection:'row', gap:10}}>
               <Image source={icons.google}
                 resizeMode='contain'
