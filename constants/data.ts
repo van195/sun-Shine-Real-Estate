@@ -81,10 +81,6 @@ export const settings = [
     icon: icons.person,
   },
   {
-    title: "Notifications",
-    icon: icons.bell,
-  },
-  {
     title: "Security",
     icon: icons.shield,
   },
