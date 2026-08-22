@@ -1,8 +1,9 @@
 import { settings } from '@/constants/data';
 import icons from '@/constants/icons';
-import images from '@/constants/images';
-import React from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { logout } from '@/lib/appwrite';
+import { AuthContext } from '@/lib/global-provider';
+import React, { useContext } from 'react';
+import { ActivityIndicator, Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 const SettingItems = ({icon,title,onPress,textStyle,showArrow=true})=>{
     return(
@@ -15,7 +16,17 @@ const SettingItems = ({icon,title,onPress,textStyle,showArrow=true})=>{
     </TouchableOpacity>)
 }
 const Profile = () => {
-  const handleLogout = ()=>{};
+  const {data,loading , isLoggedIn} = useContext(AuthContext);
+   console.log(data?.avatar);
+  const handleLogout = async()=>{
+    const result = await logout();
+    if(result){
+      return Alert.alert({title:'success',message:'you have been logged out'});
+      
+    }else{
+      return Alert.alert({title:'fail',message:'error occurred while logging out'})
+    }
+  };
   return (
     <SafeAreaView style={{height:'100vh', backgroundColor:'#fff'}}>
       <ScrollView
@@ -28,11 +39,13 @@ const Profile = () => {
         </View>
         <View style={{flex:1, flexDirection:'row', justifyContent:'center'}}>
            <View style={{flex:1, flexDirection:'column' ,alignItems:'center', position:'relative', marginTop:20}}>
-              <Image source={images.avatar} style={{width:100,height:100, borderRadius:50}}/>
+              {loading ? <ActivityIndicator />:
+                <Image source={{ uri:data?.avatar}} style={{width:100,height:100, borderRadius:50}}/> 
+              }
               <TouchableOpacity style={{position:'absolute',bottom:30,right:90}}>
                  <Image source={icons.edit} style={{width:25, height:25}}/>
               </TouchableOpacity>
-              <Text style={{marginTop:10,fontWeight:200, fontSize:14,}}>Andriw | JS mastery</Text>
+              <Text style={{marginTop:10,fontWeight:200, fontSize:14,}}>{data?.name}</Text>
            </View>
         </View>
         <View style={{flex:1, flexDirection:'column', marginTop:10}}>
@@ -45,7 +58,7 @@ const Profile = () => {
            ))}
         </View>
         <View style={{flex:1, flexDirection:'column', marginTop:10}}>
-            <SettingItems icon={icons.logout} title='Log out' showArrow={false}/>
+            <SettingItems icon={icons.logout} onPress={handleLogout()} title='Log out' showArrow={false}/>
         </View>
       </ScrollView>
     </SafeAreaView>
