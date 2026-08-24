@@ -8,8 +8,13 @@ const Filters = () => {
   const params = useLocalSearchParams()
   const [selectedCategory, setSelectedCategory] = useState(params.filter || "All");
   const handleCategory = (category) => {
+    if(selectedCategory === category){
+        setSelectedCategory('All');
+         router.setParams({
+         filter: 'All',
+        });
+    }
     setSelectedCategory(category);
-   
     router.setParams({
       filter: category,
     });
