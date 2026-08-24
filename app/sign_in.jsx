@@ -4,7 +4,7 @@ import { logIn } from '@/lib/appwrite'
 import { AuthContext } from '@/lib/global-provider'
 import { Redirect } from 'expo-router'
 import React, { useContext } from 'react'
-import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const SignIn = () => {
@@ -22,10 +22,12 @@ const SignIn = () => {
   return (
     <SafeAreaView style={{backgroundColor:'#fff',height:'100vh'}}>
       <ScrollView contentContainerStyle={{height:'100%'}}>
-        <Image source={images.onboarding} 
+        { loading ? <ActivityIndicator/> :
+        <>
+          <Image source={images.onboarding} 
                resizeMode='contain'
                style={{marginTop:20,width:'100%', height:'67%'}}
-        />
+          />
         <View style={{width:'100%', paddingHorizontal:'30px'}}>
           <Text style={{ marginTop:-30, textAlign:'center' , fontFamily:'Orbitron',fontSize:13, fontWeight:100, color:'#00000092'}}>
             Welcome To Sun Shine
@@ -44,6 +46,8 @@ const SignIn = () => {
             </View>
           </TouchableOpacity>
         </View>
+        </>
+        }
 
       </ScrollView>
     </SafeAreaView>

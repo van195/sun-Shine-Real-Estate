@@ -58,7 +58,7 @@ const Profile = () => {
            ))}
         </View>
         <View style={{flex:1, flexDirection:'column', marginTop:10}}>
-            <SettingItems icon={icons.logout} onPress={handleLogout()} title='Log out' showArrow={false}/>
+            <SettingItems icon={icons.logout} onPress={handleLogout} title='Log out' showArrow={false}/>
         </View>
       </ScrollView>
     </SafeAreaView>
